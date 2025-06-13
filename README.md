@@ -12,7 +12,7 @@ A production-ready FastAPI template with SQLAlchemy, Alembic, and modular archit
 - 📜 **Pre-commit hooks** setup
 
 ## Project Structure
-![Conceptual project structure](assets/images/structure.svg)
+![Conceptual project structure](assets/images/structure.png)
 
 ## Quick Start
 

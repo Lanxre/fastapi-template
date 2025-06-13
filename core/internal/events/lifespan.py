@@ -1,9 +1,15 @@
-from fastapi import FastAPI
 from contextlib import asynccontextmanager
+
+from fastapi import FastAPI
+
 from config import server_settings
+from logger.logger_builder import LoggerBuilder
+
+logger = LoggerBuilder("LifeSpan").add_stream_handler().build()
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    print(f"Server start on {server_settings.host}:{server_settings.port}")
+    logger.info(f"Server start on {server_settings.host}:{server_settings.port}")
     yield
-    print("Server shutting down...")
+    logger.info("Server shutting down...")

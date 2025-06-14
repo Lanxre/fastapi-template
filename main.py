@@ -8,14 +8,14 @@ from core.configuration.server import Server
 from core.internal.events.lifespan import lifespan
 
 
-def _create_app() -> FastAPI:
+def create_app() -> FastAPI:
     application = FastAPI(lifespan=lifespan)
     return Server(app=application).get_app()
 
 
 async def main():
     config = uvicorn.Config(
-        app=_create_app(),
+        app=create_app(),
         host=server_settings.host,
         port=server_settings.port
     )

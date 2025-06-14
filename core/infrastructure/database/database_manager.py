@@ -10,8 +10,12 @@ from sqlalchemy.ext.asyncio import (
 )
 
 from config import DatabaseSettings, database_settings
+from logger.logger_builder import LoggerBuilder
+# from ..repositories import SQLAlchemyRepository
 
 T = TypeVar("T")
+
+logger = LoggerBuilder("DatabaseManager").add_stream_handler().build()
 
 
 class DatabaseManager:
@@ -37,6 +41,7 @@ class DatabaseManager:
             )
             return engine
         except Exception as e:
+            logger.error(f"Connection error: {str(e)}")
             raise
 
     def create_session_pool(self) -> async_sessionmaker[AsyncSession]:
@@ -52,9 +57,11 @@ class DatabaseManager:
                 yield session
                 await session.commit()
             except SQLAlchemyError as e:
+                logger.error(f"Sesson error: {str(e)}")
                 await session.rollback()
                 raise
             except Exception as e:
+                logger.error(f"Sesson error: {str(e)}")
                 await session.rollback()
                 raise
 
@@ -83,6 +90,8 @@ class DatabaseManager:
         """Return a list of registered repository names."""
         return list(self._repository_registry.keys())
 
+
+# user_repository = SQLAlchemyRepository[User, UserCreate, UserUpdate](model=User)
 
 db_manager = DatabaseManager(
     database_settings,
